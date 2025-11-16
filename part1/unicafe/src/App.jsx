@@ -1,24 +1,34 @@
-import Header from "./Header"
-import Content from "./Content"
-import Total from "./Total"
+import { useState } from 'react'
+import Button from './Button'
+import Statistics from './Statistics'
+import Anecdotes from './Anecdotes'
 
-function App() {
-  const course = 'Half Stack application development'
-  const data = {
-    part1: 'Fundamentals of React',
-    exercises1: 10,
-    part2: 'Using props to pass data',
-    exercises2: 7,
-    part3: 'State of a component',
-    exercises3: 14
+const App = () => {
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const [total, setTotal] = useState(0)
+
+  const update = (type, setType) => {
+    setTotal(total + 1)
+    return setType(type + 1)
   }
 
   return (
     <>
-      <Header course={course}></Header>
-      <Content data={data}></Content>
-      <Total data={data}></Total>
+      <h1>Give Feedback</h1>
+      <hr />
+      <Button update={() => update(good, setGood)} text='Good' />
+      <Button update={() => update(neutral, setNeutral)} text='Neutral' />
+      <Button update={() => update(bad, setBad)} text='Bad' />
+
+      <Statistics good={good} neutral={neutral} bad={bad} total={total}/>
+      <hr />
+
+      <Anecdotes></Anecdotes>
     </>
   )
 }
+
 export default App
