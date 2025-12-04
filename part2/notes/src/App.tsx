@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Note from './components/Note'
 
-const App = ({ notes }: {notes: Note[]}) => {
-
-  const [allNotes, setAllNotes] = useState(notes)
+const App = () => {
+  const [allNotes, setAllNotes] = useState<Note[]>([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+
+  useEffect(() => {
+    fetch('http://localhost:3001/notes/')
+      .then(res => res.json())
+      .then(json => setAllNotes(json))
+      .catch(err => console.error(err));
+  },[])
 
   const notesToShow = showAll ?
                       allNotes :
