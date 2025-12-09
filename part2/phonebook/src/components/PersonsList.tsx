@@ -1,4 +1,4 @@
-import type { Person } from "../../types/person"
+import type { Person } from "../types/person"
 
 const PersonsList = ({filteredPersons, filter, persons, remove}: any) => {
 

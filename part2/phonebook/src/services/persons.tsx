@@ -1,4 +1,4 @@
-import type { NewPerson, Person } from "../../types/person"
+import type { NewPerson, Person } from "../types/person"
 
 const baseUrl = 'http://localhost:3001/persons'
 
@@ -10,39 +10,51 @@ const getAll = async (): Promise<Person[]> => {
 
 const addNew = async (person: NewPerson) => {
    try {
-    await fetch(baseUrl, {
+    const response = await fetch(baseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(person)
     })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
   } catch(error) {
-    console.error("Error:")
+    throw error
   }
 }
 
 const remove = async (id: string) => {
    try {
-    await fetch(`${baseUrl}/${id}`, {
+    const response = await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE'
     })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
   } catch(error) {
-    console.error("Error:")
+    throw error
   }
 }
 
 const update = async (person: Person) => {
   try {
-    await fetch(`${baseUrl}/${person.id}`, {
+    const response = await fetch(`${baseUrl}/${person.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(person)
     })
+
+    if (!response.ok) {
+      throw response.status
+    }
   } catch(error) {
-    console.error("Error:")
+    throw error
   }
 }
 

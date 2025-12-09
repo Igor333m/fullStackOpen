@@ -1,0 +1,27 @@
+h2 {
+  color: darkolivegreen;
+  font-style: italic;
+}
+
+li {
+  color: grey;
+  padding-top: 3px;
+  font-size: 15px;
+}
+
+.message {
+  background-color: gainsboro;
+  border-radius: 0.5em;
+  padding: 0 2em;
+  margin-bottom: 2em;
+}
+
+.message.success {
+  border: solid darkgreen, 2px;
+  color: darkgreen;
+}
+
+.message.error {
+  border: solid red, 2px;
+  color: red;
+}

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-import type { Person, NewPerson } from '../types/person'
+import type { Person, NewPerson } from './types/person'
+import type { Notification as NotificationType } from './types/notification'
 import personsService from './services/persons'
+import Notification from './components/Notification'
 import PersonsList from './components/PersonsList'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
@@ -11,6 +13,10 @@ const App = () => {
   const [newName, setNewName] = useState<string>('')
   const [newNumber, setNewNumber] = useState<string>('')
   const [filter, setFilter] = useState('')
+  const [notification, setNotification] = useState<NotificationType>({
+    message: '',
+    type: ''
+  })
 
   const getAllPersons = async () => {
     setPersons(await personsService.getAll())
@@ -23,9 +29,17 @@ const App = () => {
   const setPerson = async (person: NewPerson) => {
     try {
       await personsService.addNew(person)
+      setNotification({
+        message: `${person.name} added!`,
+        type: 'success'
+      })
+      resetForm()
       getAllPersons()
     } catch (error) {
-      alert(error)
+      setNotification({
+        message: `Something went wrong, try again!`,
+        type: 'error'
+      })
     }
   }
 
@@ -40,11 +54,14 @@ const App = () => {
         number: newNumber
       }
       setPerson(newPerson)
-      resetForm()
     } 
     else {
       if(confirm(`${newName} is already added to phonebook! Replace the old number with a new one?`)) {
         setNewNumber(newNumber)
+        setNotification({
+          message: `${newName} phone updated!`,
+          type: 'success'
+        })
 
         const person = nameSearch(newName)
         if(person) {
@@ -58,10 +75,22 @@ const App = () => {
   const updatePerson = async (person: Person) => {
     try {
       await personsService.update(person)
+      setNotification({
+        message: `${person.name} updated!`,
+        type: 'success'
+      })
       getAllPersons()
       resetForm()
     } catch (error) {
-      alert(error)
+      if(error === 404) {
+        setNotification({
+          message: `Information of ${person.name} has already been removed from the server!`,
+          type: 'error'
+        })
+      } else setNotification({
+        message: `Something went wrong, try again!`,
+        type: 'error'
+      })
     }
   }
 
@@ -80,10 +109,11 @@ const App = () => {
   const resetFilter = () => {
     setFilter('')
     setFilteredPersons([])
-  }  
+  }
+
   const resetForm = () => {
     setNewName('')
-      setNewNumber('')
+    setNewNumber('')
   }
 
   const setNewFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,10 +131,17 @@ const App = () => {
     if(window.confirm(`Delete ${person.name}`)) {
       try {
         await personsService.remove(person.id)
+        setNotification({
+          message: `${person.name} deleted successfully!`,
+          type: 'success'
+        })
         resetFilter()
         getAllPersons()
       } catch (error) {
-        alert(error)
+        setNotification({
+          message: `Something went wrong, try again!`,
+          type: 'error'
+        })
       }
     }
   }
@@ -112,6 +149,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      {notification.message && <Notification notification={notification}></Notification>}
+
       <Filter filter={filter} setNewFilter={setNewFilter} />
 
       <PersonForm nameUpdate={addNewPerson}
