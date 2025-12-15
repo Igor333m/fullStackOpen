@@ -1,13 +1,21 @@
 import express from 'express'
+import cors from 'cors'
+import 'dotenv/config'
+import type Notes from './types/notes.js'
 
 const app = express()
-app.use(express.json())
 
-interface Notes {
-  id: string
-  content: string
-  important: boolean
+/*
+* Set localhost cors only
+*/
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
+
+
+app.use(cors(corsOptions))
+app.use(express.json())
 
 let notes: Notes[] = [
   {
@@ -81,6 +89,8 @@ app.post('/api/notes', (request, response) => {
   response.json(note)
 })
 
-const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+const PORT = Number(process.env.PORT) || 3001
+app.listen(PORT, () => {
+  console.log(`process.env.PORT ${process.env.PORT}`)
+  console.log(`Server running on port ${PORT}`)
+})
