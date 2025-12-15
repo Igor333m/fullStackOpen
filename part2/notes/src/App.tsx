@@ -14,7 +14,10 @@ const App = () => {
   }
 
   useEffect(() => {
-    fetchNotes()
+    fetch('/api/notes')
+      .then(res => res.json())
+      .then(json => setAllNotes(json))
+      .catch(err => console.error(err));
   },[])
 
   const notesToShow = showAll ?
