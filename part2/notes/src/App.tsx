@@ -7,7 +7,7 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/notes')
+    fetch('/api/notes')
       .then(res => res.json())
       .then(json => setAllNotes(json))
       .catch(err => console.error(err));
