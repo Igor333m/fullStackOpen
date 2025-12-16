@@ -1,6 +1,6 @@
 import type { NewPerson, Person } from "../types/person"
 
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = '/api/persons/'
 
 const getAll = async (): Promise<Person[]> => {
   return fetch(baseUrl)
