@@ -1,23 +1,12 @@
 import express from 'express'
-import cors from 'cors'
 import 'dotenv/config'
-import type Notes from './types/notes.js'
+import type Note from './types/Note.js'
 
 const app = express()
 
-/*
-* Set localhost cors only
-*/
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
-
-app.use(cors(corsOptions))
 app.use(express.json())
 
-let notes: Notes[] = [
+let notes: Note[] = [
   {
     id: "1",
     content: "HTML is easy",

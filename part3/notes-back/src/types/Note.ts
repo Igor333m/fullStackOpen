@@ -1,4 +1,4 @@
-export default interface Notes {
+export default interface Note {
   id: string
   content: string
   important: boolean
